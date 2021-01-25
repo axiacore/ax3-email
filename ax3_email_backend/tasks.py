@@ -1,4 +1,5 @@
 import logging
+from smtplib import SMTPException
 
 from huey.contrib.djhuey import task
 from .utils import _deserialize_email_message, _serialize_email_message
