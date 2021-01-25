@@ -1,5 +1,10 @@
 from django.conf import settings
 
-AX3EMAILBACKEND = getattr(settings, 'AX3EMAILBACKEND', 'django.core.mail.backends.smtp.EmailBackend')
-AX3RETRIES = getattr(settings, 'AX3RETRIES', 3)
-AX3DELAY = getattr(settings, 'AX3DELAY', 600)
+
+EMAIL_BACKEND = getattr(
+    settings,
+    'AX3_EMAIL_BACKEND',
+    'django.core.mail.backends.smtp.EmailBackend'
+)
+RETRIES = getattr(settings, 'AX3_RETRIES', 3)
+DELAY = getattr(settings, 'AX3_DELAY', 600)

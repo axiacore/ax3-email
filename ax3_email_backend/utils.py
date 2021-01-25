@@ -3,24 +3,7 @@ import base64
 import copy
 
 from django.core.mail import EmailMultiAlternatives, EmailMessage, get_connection
-from .settings import AX3EMAILBACKEND
-
-
-def chunked(iterator, chunksize):
-    """
-    Yields items from 'iterator' in chunks of size 'chunksize'.
-
-    >>> list(chunked([1, 2, 3, 4, 5], chunksize=2))
-    [(1, 2), (3, 4), (5,)]
-    """
-    chunk = []
-    for idx, item in enumerate(iterator, 1):
-        chunk.append(item)
-        if idx % chunksize == 0:
-            yield chunk
-            chunk = []
-    if chunk:
-        yield chunk
+from .settings import EMAIL_BACKEND
 
 
 def _serialize_email_message(email_message):
@@ -92,12 +75,12 @@ def _deserialize_email_message(serialized_email_message):
 
     if 'alternatives' in message_kwargs:
         message = EmailMultiAlternatives(
-            connection=get_connection(backend=AX3EMAILBACKEND),
+            connection=get_connection(backend=EMAIL_BACKEND),
             **message_kwargs,
         )
     else:
         message = EmailMessage(
-            connection=get_connection(backend=AX3EMAILBACKEND),
+            connection=get_connection(backend=EMAIL_BACKEND),
             **message_kwargs,
         )
 
