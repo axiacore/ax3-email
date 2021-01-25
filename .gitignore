@@ -1,0 +1,7 @@
+# Distribution / packaging
+*.egg-info/
+*.egg
+
+#IDEs
+.vscode/
+.idea/
