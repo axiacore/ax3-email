@@ -21,7 +21,7 @@ setup(
     author_email='info@axiacore.com',
     include_package_data=True,
     install_requires=[
-        'django >= 3.1.5'
-        'huey >= 2.3.0'
+        'django >= 3.1.5',
+        'huey >= 2.3.0',
     ]
 )
