@@ -3,7 +3,8 @@ import base64
 import copy
 
 from django.core.mail import EmailMultiAlternatives, EmailMessage, get_connection
-from settings import AX3EMAILBACKEND
+from .settings import AX3EMAILBACKEND
+
 
 def chunked(iterator, chunksize):
     """
@@ -105,4 +106,3 @@ def _deserialize_email_message(serialized_email_message):
         setattr(message, attr, val)
 
     return message
-

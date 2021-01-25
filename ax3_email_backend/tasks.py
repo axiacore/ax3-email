@@ -2,7 +2,7 @@ import logging
 
 from huey.contrib.djhuey import task
 from .utils import _deserialize_email_message, _serialize_email_message
-from settings import AX3RETRIES, AX3DELAY
+from .settings import AX3RETRIES, AX3DELAY
 
 
 logger = logging.getLogger('huey.consumer')

@@ -1,7 +1,7 @@
 from django.core.mail.backends.base import BaseEmailBackend
 
-from app.utils import _serialize_email_message
-from app.tasks import _async_send_messages
+from utils import _serialize_email_message
+from tasks import _async_send_messages
 
 
 class AX3EmailBackend(BaseEmailBackend):
