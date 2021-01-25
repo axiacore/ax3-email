@@ -3,7 +3,7 @@ import base64
 import copy
 
 from django.core.mail import EmailMultiAlternatives, EmailMessage, get_connection
-
+from settings import AX3EMAILBACKEND
 
 def chunked(iterator, chunksize):
     """
@@ -91,12 +91,12 @@ def _deserialize_email_message(serialized_email_message):
 
     if 'alternatives' in message_kwargs:
         message = EmailMultiAlternatives(
-            connection=get_connection(backend='django.core.mail.backends.smtp.EmailBackend'),
+            connection=get_connection(backend=AX3EMAILBACKEND),
             **message_kwargs,
         )
     else:
         message = EmailMessage(
-            connection=get_connection(backend='django.core.mail.backends.smtp.EmailBackend'),
+            connection=get_connection(backend=AX3EMAILBACKEND),
             **message_kwargs,
         )
 

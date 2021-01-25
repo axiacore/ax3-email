@@ -2,13 +2,14 @@ import logging
 
 from huey.contrib.djhuey import task
 from .utils import _deserialize_email_message, _serialize_email_message
+from settings import AX3RETRIES, AX3DELAY
 
 
 logger = logging.getLogger('huey.consumer')
 
 
 @task()
-def _async_send_messages(serializable_email_messages, retries=3):
+def _async_send_messages(serializable_email_messages, retries=AX3RETRIES):
     count = 0
 
     for email in serializable_email_messages:
@@ -23,7 +24,7 @@ def _async_send_messages(serializable_email_messages, retries=3):
                 _async_send_messages.schedule(
                     serializable_email_messages=[_serialize_email_message(message)],
                     retries=retries - 1,
-                    delay=(60 * 10)
+                    delay=AX3DELAY
                 )
             else:
                 logger.info('Unable to send email to %s. Response: %s', message.to, exc)
