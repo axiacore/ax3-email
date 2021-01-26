@@ -10,7 +10,7 @@ with open('README.md', 'r') as fh:
 os.chdir(os.path.normpath(os.path.join(os.path.abspath(__file__), os.pardir)))
 
 setup(
-    name='AX3 EmailBackend',
+    name='AX3 Email',
     version=__VERSION__,
     packages=find_packages(),
     description='A Django app to send emails using Huey tasks',

@@ -1,24 +1,26 @@
-# AX3 EmailBackend
+# AX3 Email
 
-AX3 EmailBackend A Django app to send emails using Huey tasks
+AX3 Email A Django app to send emails using Huey tasks
 
 ## Installation
-AX3 EmailBackend is easy to install from the PyPI package:
+AX3 Email is easy to install from the PyPI package:
 
-```
-$ pip install ax3-email-backend
+```bash
+$ pip install ax3-email
 ```
 
 After installing the package, the project settings need to be configured.
 add `ax3_email_backend` to your `INSTALLED_APPS`
 
-`INSTALLED_APPS += [ax3_email_backend]`
+`INSTALLED_APPS += [ax3_email]`
 ## Configuration
+
 Add email backend settings
-``` 
+
+```python 
 # app/settings.py
-EMAILBACKEND = 'AX3EmailBackend'
-AX3_EMAIL_BACKEND = # Django EmailBackend that does the actual sending // Optional - Default smtp (django)
-AX3_RETRIES =  # Maximun number of times to retry // Optional - Default 3
-AX3_DELAY = # Time in seconds between attemps // Optional - Default = 600
+EMAIL_BACKEND = 'AX3Email'
+AX3_EMAIL_BACKEND = # Django Email that does the actual sending // Optional - Default smtp (django)
+AX3_RETRIES =  # Maximum number of times to retry // Optional - Default 3
+AX3_DELAY = # Time in seconds between attempts // Optional - Default = 600
 ```
