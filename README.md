@@ -19,8 +19,8 @@ Add email backend settings
 
 ```python 
 # app/settings.py
-EMAIL_BACKEND = 'AX3Email'
-AX3_EMAIL_BACKEND = # Django Email that does the actual sending // Optional - Default smtp (django)
+EMAIL_BACKEND = 'ax3_email.backends.AX3EmailBackend'
+AX3_EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend' # Django Email that does the actual sending // Optional - Default smtp (django)
 AX3_RETRIES =  # Maximum number of times to retry // Optional - Default 3
 AX3_DELAY = # Time in seconds between attempts // Optional - Default = 600
 ```
