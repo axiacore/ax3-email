@@ -4,6 +4,7 @@ import copy
 
 from django.core.mail import EmailMultiAlternatives, EmailMessage, get_connection
 from .settings import EMAIL_BACKEND
+import pickle
 
 
 def _serialize_email_message(email_message):
@@ -30,19 +31,8 @@ def _serialize_email_message(email_message):
 
     attachments = email_message.attachments
     for attachment in attachments:
-        if isinstance(attachment, MIMEBase):
-            filename = attachment.get_filename('')
-            binary_contents = attachment.get_payload(decode=True)
-            mimetype = attachment.get_content_type()
-
-        else:
-            filename, binary_contents, mimetype = attachment
-            # For a mimetype starting with text/, content is expected to be a string.
-            if isinstance(binary_contents, str):
-                binary_contents = binary_contents.encode()
-
-        contents = base64.b64encode(binary_contents).decode('ascii')
-        message_dict['attachments'].append((filename, contents, mimetype))
+        attach = pickle.dumps(attachment)
+        message_dict['attachments'].append(attach)
 
     return message_dict
 
@@ -64,14 +54,8 @@ def _deserialize_email_message(serialized_email_message):
     attachments = message_kwargs.pop('attachments')
     message_kwargs['attachments'] = []
     for attachment in attachments:
-        filename, contents, mimetype = attachment
-        contents = base64.b64decode(contents.encode('ascii'))
-
-        # For a mimetype starting with text/, content is expected to be a string.
-        if mimetype and mimetype.startswith('text/'):
-            contents = contents.decode()
-
-        message_kwargs['attachments'].append((filename, contents, mimetype))
+        attach = pickle.loads(attachment)
+        message_kwargs['attachments'].append(attach)
 
     if 'alternatives' in message_kwargs:
         message = EmailMultiAlternatives(
