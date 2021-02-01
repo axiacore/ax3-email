@@ -10,7 +10,7 @@ $ pip install ax3-email
 ```
 
 After installing the package, the project settings need to be configured.
-add `ax3_email_backend` to your `INSTALLED_APPS`
+add `ax3_email` to your `INSTALLED_APPS`
 
 `INSTALLED_APPS += [ax3_email]`
 ## Configuration
