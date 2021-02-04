@@ -98,4 +98,6 @@ def send_email(subject, body, mail_to, reply_to=None, bcc=None, attachments=None
         for attachment in attachments:
             email_message.attach(attachment)
 
+    email_message.content_subtype = "html"
+
     email_message.send()
