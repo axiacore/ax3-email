@@ -1,10 +1,11 @@
-from email.mime.base import MIMEBase
-import base64
 import copy
-
-from django.core.mail import EmailMultiAlternatives, EmailMessage, get_connection
-from .settings import EMAIL_BACKEND
 import pickle
+
+from django.conf import settings
+from django.core.exceptions import ValidationError
+from django.core.mail import EmailMultiAlternatives, EmailMessage, get_connection
+
+from .settings import EMAIL_BACKEND
 
 
 def _serialize_email_message(email_message):
@@ -73,3 +74,28 @@ def _deserialize_email_message(serialized_email_message):
         setattr(message, attr, val)
 
     return message
+
+
+def send_email(subject, body, mail_to, reply_to=None, bcc=None, attachments=None, alternative=None):
+    email_message = EmailMultiAlternatives(
+        subject=subject,
+        body=body,
+        from_email=settings.DEFAULT_FROM_EMAIL,
+        to=mail_to,
+        reply_to=reply_to,
+        bcc=bcc,
+    )
+
+    if alternative is not None:
+        if 'content' in alternative and 'mimetype' in alternative:
+            content = alternative['content']
+            mimetype = alternative['mimetype']
+            email_message.attach_alternative(content, mimetype)
+        else:
+            raise ValidationError('invalid alternative: Unable to add alternative to email')
+
+    if attachments is not None:
+        for attachment in attachments:
+            email_message.attach(attachment)
+
+    email_message.send()
