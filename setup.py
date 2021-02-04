@@ -23,5 +23,6 @@ setup(
     install_requires=[
         'django >= 3.1.5',
         'huey >= 2.3.0',
+        'premailer >= 3.7.0',
     ]
 )

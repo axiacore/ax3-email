@@ -4,6 +4,7 @@ import pickle
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.core.mail import EmailMultiAlternatives, EmailMessage, get_connection
+from premailer import transform
 
 from .settings import EMAIL_BACKEND
 
@@ -79,7 +80,7 @@ def _deserialize_email_message(serialized_email_message):
 def send_email(subject, body, mail_to, reply_to=None, bcc=None, attachments=None, alternative=None):
     email_message = EmailMultiAlternatives(
         subject=subject,
-        body=body,
+        body=transform(body),
         from_email=settings.DEFAULT_FROM_EMAIL,
         to=mail_to,
         reply_to=reply_to,
@@ -99,5 +100,4 @@ def send_email(subject, body, mail_to, reply_to=None, bcc=None, attachments=None
             email_message.attach(attachment)
 
     email_message.content_subtype = 'html'
-
     email_message.send()
