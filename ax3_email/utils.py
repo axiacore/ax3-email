@@ -77,11 +77,11 @@ def _deserialize_email_message(serialized_email_message):
     return message
 
 
-def send_email(subject, body, mail_to, reply_to=None, bcc=None, attachments=None, alternative=None):
+def send_email(subject, body, mail_to, reply_to=None, bcc=None, from_email=settings.DEFAULT_FROM_EMAIL, attachments=None, alternative=None):
     email_message = EmailMultiAlternatives(
         subject=subject,
         body=transform(body),
-        from_email=settings.DEFAULT_FROM_EMAIL,
+        from_email=from_email,
         to=mail_to,
         reply_to=reply_to,
         bcc=bcc,
