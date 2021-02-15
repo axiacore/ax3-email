@@ -77,27 +77,74 @@ def _deserialize_email_message(serialized_email_message):
     return message
 
 
-def send_email(subject, body, mail_to, reply_to=None, bcc=None, attachments=None, alternative=None):
-    email_message = EmailMultiAlternatives(
-        subject=subject,
-        body=transform(body),
-        from_email=settings.DEFAULT_FROM_EMAIL,
-        to=mail_to,
-        reply_to=reply_to,
-        bcc=bcc,
-    )
-
-    if alternative is not None:
-        if 'content' in alternative and 'mimetype' in alternative:
-            content = alternative['content']
-            mimetype = alternative['mimetype']
-            email_message.attach_alternative(content, mimetype)
-        else:
-            raise ValidationError('invalid alternative: Unable to add alternative to email')
+def send_email(
+    subject,
+    body,
+    mail_to,
+    reply_to=None,
+    bcc=None,
+    from_email=settings.DEFAULT_FROM_EMAIL,
+    attachments=None,
+    alternative=None
+):
+    if alternative is None:
+        email_message = _email_message_simple(
+            subject=subject,
+            body=body,
+            mail_to=mail_to,
+            reply_to=reply_to,
+            bcc=bcc,
+            from_email=from_email,
+        )
+    else:
+        email_message = _email_message_alternatives(
+            subject=subject,
+            body=body,
+            mail_to=mail_to,
+            alternative=alternative,
+            reply_to=reply_to,
+            bcc=bcc,
+            from_email=from_email,
+        )
 
     if attachments is not None:
         for attachment in attachments:
             email_message.attach(attachment)
 
-    email_message.content_subtype = 'html'
     email_message.send()
+
+
+def _email_message_simple(subject, body, mail_to, reply_to, bcc, from_email):
+    email_message = EmailMessage(
+        subject=subject,
+        body=transform(body),
+        from_email=from_email,
+        to=mail_to,
+        reply_to=reply_to,
+        bcc=bcc,
+    )
+    email_message.content_subtype = 'html'
+
+    return email_message
+
+
+def _email_message_alternatives(subject, body, mail_to, alternative, reply_to, bcc, from_email):
+    email_message = EmailMultiAlternatives(
+        subject=subject,
+        body=body,
+        from_email=from_email,
+        to=mail_to,
+        reply_to=reply_to,
+        bcc=bcc,
+    )
+    if 'content' in alternative and 'mimetype' in alternative:
+        content = alternative['content']
+        mimetype = alternative['mimetype']
+        if 'html' in mimetype:
+            content = transform(content)
+        email_message.attach_alternative(content, mimetype)
+    else:
+        raise ValidationError('invalid alternative: Unable to add alternative to email')
+
+    email_message.content_subtype = 'related'
+    return email_message
