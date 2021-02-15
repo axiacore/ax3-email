@@ -140,8 +140,11 @@ def _email_message_alternatives(subject, body, mail_to, alternative, reply_to, b
     if 'content' in alternative and 'mimetype' in alternative:
         content = alternative['content']
         mimetype = alternative['mimetype']
+        if 'html' in mimetype:
+            content = transform(content)
         email_message.attach_alternative(content, mimetype)
     else:
         raise ValidationError('invalid alternative: Unable to add alternative to email')
 
+    email_message.content_subtype = 'related'
     return email_message
