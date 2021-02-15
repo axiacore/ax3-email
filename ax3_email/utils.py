@@ -146,5 +146,5 @@ def _email_message_alternatives(subject, body, mail_to, alternative, reply_to, b
     else:
         raise ValidationError('invalid alternative: Unable to add alternative to email')
 
-    email_message.content_subtype = 'related'
+    email_message.mixed_subtype = 'related'
     return email_message
