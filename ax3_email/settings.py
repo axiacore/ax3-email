@@ -8,4 +8,3 @@ EMAIL_BACKEND = getattr(
 )
 RETRIES = getattr(settings, 'AX3_RETRIES', 3)
 DELAY = getattr(settings, 'AX3_DELAY', 600)
-EMAIL_SUBJECT = getattr(settings, 'EMAIL_SUBJECT', '{}')
