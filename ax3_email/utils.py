@@ -6,7 +6,7 @@ from django.core.exceptions import ValidationError
 from django.core.mail import EmailMultiAlternatives, EmailMessage, get_connection
 from premailer import transform
 
-from .settings import EMAIL_BACKEND
+from .settings import EMAIL_BACKEND, EMAIL_SUBJECT
 
 
 def _serialize_email_message(email_message):
@@ -116,7 +116,7 @@ def send_email(
 
 def _email_message_simple(subject, body, mail_to, reply_to, bcc, from_email):
     email_message = EmailMessage(
-        subject=subject,
+        subject=EMAIL_SUBJECT.format(subject),
         body=transform(body),
         from_email=from_email,
         to=mail_to,
@@ -130,7 +130,7 @@ def _email_message_simple(subject, body, mail_to, reply_to, bcc, from_email):
 
 def _email_message_alternatives(subject, body, mail_to, alternative, reply_to, bcc, from_email):
     email_message = EmailMultiAlternatives(
-        subject=subject,
+        subject=EMAIL_SUBJECT.format(subject),
         body=body,
         from_email=from_email,
         to=mail_to,
