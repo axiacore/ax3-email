@@ -89,7 +89,7 @@ def send_email(
 ):
     if alternative is None:
         email_message = _email_message_simple(
-            subject=subject,
+            subject=_email_subject_format(subject),
             body=body,
             mail_to=mail_to,
             reply_to=reply_to,
@@ -98,7 +98,7 @@ def send_email(
         )
     else:
         email_message = _email_message_alternatives(
-            subject=subject,
+            subject=_email_subject_format(subject),
             body=body,
             mail_to=mail_to,
             alternative=alternative,
@@ -148,3 +148,9 @@ def _email_message_alternatives(subject, body, mail_to, alternative, reply_to, b
 
     email_message.mixed_subtype = 'related'
     return email_message
+
+
+def _email_subject_format(subject):
+    if hasattr(settings, 'EMAIL_SUBJECT'):
+        return settings.EMAIL_SUBJECT.format(subject)
+    return subject
