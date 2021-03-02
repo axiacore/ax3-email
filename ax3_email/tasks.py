@@ -23,10 +23,9 @@ def _async_send_messages(serializable_email_messages, retries=RETRIES):
                 logger.info('Email sent to %s', message.to)
         except SMTPException as exc:
             if retries > 0:
-                _async_send_messages.schedule(
-                    serializable_email_messages=[_serialize_email_message(message)],
-                    retries=retries - 1,
-                    delay=DELAY
-                )
+                _async_send_messages.schedule(kwargs={
+                    'serializable_email_messages': [_serialize_email_message(message)],
+                    'retries': retries - 1,
+                }, delay=DELAY)
             else:
                 logger.info('Unable to send email to %s. Response: %s', message.to, exc)
