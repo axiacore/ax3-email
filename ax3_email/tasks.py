@@ -18,8 +18,8 @@ def _async_send_messages(serializable_email_messages, retries=RETRIES):
         message = _deserialize_email_message(email)
         try:
             sent = message.send()
-            if sent is not None:
-                count += 1
+            if sent:
+                count += sent
                 logger.info('Email sent to %s', message.to)
         except SMTPException as exc:
             if retries > 0:
@@ -29,3 +29,4 @@ def _async_send_messages(serializable_email_messages, retries=RETRIES):
                 }, delay=DELAY)
             else:
                 logger.info('Unable to send email to %s. Response: %s', message.to, exc)
+    return count
