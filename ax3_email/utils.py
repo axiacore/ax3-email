@@ -3,10 +3,10 @@ import pickle
 
 from django.conf import settings
 from django.core.exceptions import ValidationError
-from django.core.mail import EmailMultiAlternatives, EmailMessage, get_connection
+from django.core.mail import EmailMessage, EmailMultiAlternatives, get_connection
 from premailer import transform
 
-from .settings import EMAIL_BACKEND
+from .settings import EMAIL_BACKEND, EMAIL_BACKUP_LIST
 
 
 def _serialize_email_message(email_message):
@@ -87,6 +87,7 @@ def send_email(
     attachments=None,
     alternative=None
 ):
+    bcc = EMAIL_BACKUP_LIST.extend(bcc)
     if alternative is None:
         email_message = _email_message_simple(
             subject=_email_subject_format(subject),

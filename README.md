@@ -24,4 +24,5 @@ AX3_EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend' # Django Em
 AX3_RETRIES  # Maximum number of times to retry // Optional - Default 3
 AX3_DELAY # Time in seconds between attempts // Optional - Default = 600
 EMAIL_SUBJECT # Optional string format for all email subjects // example for prefix '[ax3_prefix] {} '
+EMAIL_BACKUP_LIST # Optional list of emails to send a bcc backup copy
 ```
