@@ -111,7 +111,7 @@ def send_email(
 
     if attachments is not None:
         for attachment in attachments:
-            email_message.attach(attachment)
+            email_message.attach(*attachment)
 
     email_message.send()
 
