@@ -87,15 +87,13 @@ def send_email(
     attachments=None,
     alternative=None
 ):
-    bcc = EMAIL_BACKUP_LIST.extend(bcc) if bcc else EMAIL_BACKUP_LIST
-
     if alternative is None:
         email_message = _email_message_simple(
             subject=_email_subject_format(subject),
             body=body,
             mail_to=mail_to,
             reply_to=reply_to,
-            bcc=bcc,
+            bcc=bcc + EMAIL_BACKUP_LIST,
             from_email=from_email,
         )
     else:
@@ -105,7 +103,7 @@ def send_email(
             mail_to=mail_to,
             alternative=alternative,
             reply_to=reply_to,
-            bcc=bcc,
+            bcc=bcc + EMAIL_BACKUP_LIST,
             from_email=from_email,
         )
 
