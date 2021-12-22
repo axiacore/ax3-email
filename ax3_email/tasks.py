@@ -1,5 +1,4 @@
 import logging
-from smtplib import SMTPException, SMTPServerDisconnected
 
 from huey.contrib.djhuey import task
 
@@ -21,7 +20,7 @@ def _async_send_messages(serializable_email_messages, retries=RETRIES):
             if sent is not None:
                 count += 1
                 logger.info('Email sent to %s', message.to)
-        except (SMTPException, SMTPServerDisconnected) as exc:
+        except (OSError, IOError) as exc:
             if retries > 0:
                 _async_send_messages.schedule(kwargs={
                     'serializable_email_messages': [_serialize_email_message(message)],
