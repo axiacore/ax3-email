@@ -1,28 +1,47 @@
 # AX3 Email
 
-AX3 Email A Django app to send emails using Huey tasks
+AX3 Email is a Django application designed to send emails using Huey tasks.
 
 ## Installation
-AX3 Email is easy to install from the PyPI package:
+
+You can easily install AX3 Email from the PyPI package using the following command:
 
 ```bash
-$ pip install ax3-email
+pip install ax3-email
 ```
 
-After installing the package, the project settings need to be configured.
-add `ax3_email` to your `INSTALLED_APPS`
+After the package is installed, you need to configure your project settings. Specifically, you need to add `ax3_email` to your `INSTALLED_APPS`:
 
-`INSTALLED_APPS += [ax3_email]`
+```python
+INSTALLED_APPS += ['ax3_email']
+```
+
 ## Configuration
 
-Add email backend settings
+Next, you need to add the email backend settings. Here's how you can do it:
 
-```python 
+```python
 # app/settings.py
 EMAIL_BACKEND = 'ax3_email.backends.AX3EmailBackend'
-AX3_EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend' # Django Email that does the actual sending // Optional - Default smtp (django)
-AX3_RETRIES  # Maximum number of times to retry // Optional - Default 3
-AX3_DELAY # Time in seconds between attempts // Optional - Default = 600
-EMAIL_SUBJECT # Optional string format for all email subjects // example for prefix '[ax3_prefix] {} '
-EMAIL_BACKUP_LIST # Optional list of emails to send a bcc backup copy
+```
+
+You can also specify additional settings for AX3 Email:
+
+```python
+# app/settings.py
+AX3_EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend' # Optional - Default is smtp (django). This is the Django Email that actually sends the emails.
+AX3_EMAIL_RETRIES  # Optional - Default is 3. This is the maximum number of times to retry sending an email.
+AX3_EMAIL_DELAY # Optional - Default is 600. This is the time in seconds between attempts to send an email.
+AX3_EMAIL_BACKUP_LIST # Optional - This is a list of emails to send a BCC backup copy of each email.
+AX3_ONLY_BACKUP_LIST # Optional - If set to True, emails will only be sent to the backup list.
+EMAIL_SUBJECT # Optional - This is a string format for all email subjects. For example, you can use '[ax3_prefix] {} ' as a prefix.
+```
+
+## Publish package
+
+To build the package, you need to run the following command:
+
+```bash
+rye build && rye publish
+
 ```

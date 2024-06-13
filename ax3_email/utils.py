@@ -6,7 +6,7 @@ from django.core.exceptions import ValidationError
 from django.core.mail import EmailMessage, EmailMultiAlternatives, get_connection
 from premailer import transform
 
-from .settings import EMAIL_BACKEND, EMAIL_BACKUP_LIST
+from .settings import EMAIL_BACKEND, EMAIL_BACKUP_LIST, ONLY_BACKUP_LIST
 
 
 def _serialize_email_message(email_message):
@@ -19,17 +19,17 @@ def _serialize_email_message(email_message):
         'attachments': [],
         'headers': email_message.extra_headers,
         'cc': email_message.cc,
-        'reply_to': email_message.reply_to
+        'reply_to': email_message.reply_to,
     }
 
     if hasattr(email_message, 'alternatives'):
         message_dict['alternatives'] = email_message.alternatives
 
     if email_message.content_subtype != EmailMessage.content_subtype:
-        message_dict["content_subtype"] = email_message.content_subtype
+        message_dict['content_subtype'] = email_message.content_subtype
 
     if email_message.mixed_subtype != EmailMessage.mixed_subtype:
-        message_dict["mixed_subtype"] = email_message.mixed_subtype
+        message_dict['mixed_subtype'] = email_message.mixed_subtype
 
     attachments = email_message.attachments
     for attachment in attachments:
@@ -85,8 +85,13 @@ def send_email(
     bcc=None,
     from_email=settings.DEFAULT_FROM_EMAIL,
     attachments=None,
-    alternative=None
+    alternative=None,
 ):
+    if ONLY_BACKUP_LIST:
+        mail_to = EMAIL_BACKUP_LIST
+        reply_to = None
+        bcc = None
+
     bcc_list: list = bcc + EMAIL_BACKUP_LIST if bcc else EMAIL_BACKUP_LIST
     if alternative is None:
         email_message = _email_message_simple(

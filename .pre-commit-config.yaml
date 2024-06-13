@@ -1,0 +1,58 @@
+fail_fast: true
+exclude: ^docs/|/migrations/
+default_stages:
+  - commit
+
+repos:
+  - repo: 'https://github.com/pre-commit/pre-commit-hooks'
+    rev: v4.6.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+        exclude: \w+\.drawio
+      - id: check-json
+      - id: check-toml
+      - id: check-yaml
+      - id: debug-statements
+      - id: check-builtin-literals
+      - id: check-case-conflict
+      - id: check-docstring-first
+      - id: detect-private-key
+      - id: check-added-large-files
+
+  - repo: 'https://github.com/commitizen-tools/commitizen'
+    rev: v3.27.0
+    hooks:
+      - id: commitizen
+        stages:
+          - commit-msg
+
+  - repo: 'https://github.com/asottile/pyupgrade'
+    rev: v3.16.0
+    hooks:
+      - id: pyupgrade
+        args:
+          - '--py310-plus'
+
+  - repo: 'https://github.com/adamchainz/django-upgrade'
+    rev: 1.18.0
+    hooks:
+      - id: django-upgrade
+        args:
+          - '--target-version'
+          - '5.0'
+
+  - repo: 'https://github.com/psf/black-pre-commit-mirror'
+    rev: 24.4.2
+    hooks:
+      - id: black
+
+  - repo: 'https://github.com/charliermarsh/ruff-pre-commit'
+    rev: v0.4.8
+    hooks:
+      - id: ruff
+
+ci:
+  autoupdate_schedule: weekly
+  skip: []
+  submodules: false
